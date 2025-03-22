@@ -14,29 +14,20 @@ async def generate_itinerary(
     itinerary = await generator.build_and_save()
     return {"status": "SUCCESS", "itinerary": itinerary}
 
-@router.post("/update/{itinerary_id}")
-async def update_full_itinerary(
-    itinerary_id: str,
+@router.post("/update")
+async def update_full_itinerary(    
     itineraryUpdationRequest: ItineraryUpdationRequestModel, 
 ):
-    updator = ItineraryUpdater(itineraryUpdationRequest.user_input, itinerary_id)
-    update_status = await updator.update_full()
+    itinerary_id = itineraryUpdationRequest.itinerary_id
+    day_id = itineraryUpdationRequest.day_id
+    updator = ItineraryUpdater(itineraryUpdationRequest.user_input, itinerary_id=itinerary_id)
+    update_status = False
+    if not day_id:
+        update_status = await updator.update_full()
+    else:
+        update_status = await updator.update_single_day(day_id)
 
     if update_status:
         return {"status": "SUCCESS"}
 
-    return {"status": "FAILURE"}
-
-@router.post("/update/{itinerary_id}/{day_id}")
-async def update_single_day(
-    itinerary_id: str,
-    day_id: str,
-    itineraryUpdationRequest: ItineraryUpdationRequestModel, 
-):
-    updator = ItineraryUpdater(itineraryUpdationRequest.user_input, itinerary_id)
-    update_status = await updator.update_single_day(day_id)
-
-    if update_status:
-        return {"status": "SUCCESS"}
-    
     return {"status": "FAILURE"}
