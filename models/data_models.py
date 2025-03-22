@@ -30,3 +30,11 @@ class Itinerary(BaseModel):
     details: Dict[str, DayDetails]  # Mapping day to DayDetails
     created_at: datetime
     updated_at: datetime
+
+class PointOfInterest(BaseModel):
+    name: Optional[str] = None
+    lat: Optional[float] = None
+    lon: Optional[float] = None
+    category: Optional[str] = None
+    description: Optional[str] = None
+    website: Optional[str] = None

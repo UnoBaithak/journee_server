@@ -1,7 +1,9 @@
 from models.request_models import ItineraryGenerationRequestModel
 from models.data_models import Itinerary, ItineraryMetadata, Activity, DayDetails
 from services.db_service import DBService
+from services.hotspots_service import HotspotService
 from datetime import datetime
+import asyncio
 
 class ItineraryGenerator():
     def __init__(self, itineraryGenerationRequest: ItineraryGenerationRequestModel):
@@ -9,10 +11,11 @@ class ItineraryGenerator():
         self.num_days = itineraryGenerationRequest.num_days
         self.preferences = itineraryGenerationRequest.preferences
         self.collection = DBService().get_collection("itineraries")
+        self.hotspots_service = HotspotService()
     
-    def generate_itinerary(self) -> Itinerary:
+    async def generate_itinerary(self) -> Itinerary:
         """Generate a dummy itinerary with updated models"""
-
+        print(await self.hotspots_service.get_top_hotspots(destination=self.destination))
         dummy_details = {
             f"day_{i+1}": DayDetails(
                 day_id=f"day_{i+1}_dummy",
@@ -57,7 +60,7 @@ class ItineraryGenerator():
 
     async def build_and_save(self) -> str:
         """Create, save, and return the itinerary ID"""
-        itinerary = self.generate_itinerary()
+        itinerary = await self.generate_itinerary()
         itinerary_id = await self.save_to_db(itinerary)
         return itinerary_id
 
