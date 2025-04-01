@@ -1,13 +1,24 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 
+class PointOfInterest(BaseModel):
+    name: str = Field(description="Name of the point of interest being visited")
+    lat: Optional[float] = None
+    lon: Optional[float] = None
+    category: Optional[str] = None
+    description: Optional[str] = None
+    website: Optional[str] = None
+
 class Activity(BaseModel):
-    name: str
+    activity_id: str
+    pointsOfInterest: Optional[List[PointOfInterest]] = Field(description="List of points of interest/hotspots being visited in this activity.")
+    title: str
     time: datetime
     duration: int
     category: str
-    metadata: Optional[Dict[str, Any]] = None
+    description: str
+    # metadata: Dict[str, str] = Field(description="Placeholder, always return None")
 
 class Accommodation(BaseModel):
     hotel_name: str
@@ -16,25 +27,18 @@ class Accommodation(BaseModel):
     metadata: Optional[Dict[str, Any]] = None
 
 class DayDetails(BaseModel):
-    day_id: str  # Unique ID for the day
+    day_id: str 
     activities: List[Activity]
-    accommodation: Optional[Accommodation]
 
 class ItineraryMetadata(BaseModel):
     destination: str
     num_days: int
-    preferences: dict
+    preferences: str
 
 class Itinerary(BaseModel):
     metadata: ItineraryMetadata
-    details: Dict[str, DayDetails]  # Mapping day to DayDetails
+    title: str
+    details: List[DayDetails]
     created_at: datetime
     updated_at: datetime
 
-class PointOfInterest(BaseModel):
-    name: Optional[str] = None
-    lat: Optional[float] = None
-    lon: Optional[float] = None
-    category: Optional[str] = None
-    description: Optional[str] = None
-    website: Optional[str] = None

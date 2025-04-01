@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from routes.itineraries import router as itinerary_router
+from dotenv import load_dotenv
+
+load_dotenv("development.env")
 
 app = FastAPI()
 

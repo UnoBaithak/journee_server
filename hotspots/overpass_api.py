@@ -10,7 +10,7 @@ logger = logging.getLogger("OverpassFetcher")
 class OverpassDataFetcher():
     OVERPASS_URL = "https://overpass-api.de/api/interpreter"
     
-    async def fetch_hotspots(self, lat, lon, radius=3000, category="tourism"):
+    async def fetch_hotspots(self, lat, lon, radius=20000, category="tourism"):
         query=f"""
         [out:json];
         (
@@ -52,4 +52,7 @@ class OverpassDataFetcher():
                 )
         
         print(f"Found {len(pois)} points of interest")
+        with open("/Users/atharvasune/Desktop/hotposts.txt", "w+") as f:
+            print(pois, file=f)
+        
         return pois

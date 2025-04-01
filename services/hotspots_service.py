@@ -12,7 +12,7 @@ class HotspotService:
         self.overpass_fetcher = OverpassDataFetcher()
         self.metadata_fetcher = MetadataFetcher()
 
-    async def get_top_hotspots(self, destination: str, num_results=5, radius=3000):
+    async def get_top_hotspots(self, destination: str, num_results=5, radius=10000):
         """Get top hotspots for a given destination"""
         print("Fetching lat lon")
         lat, lon = await self.metadata_fetcher.get_lat_lon(destination)
@@ -22,7 +22,7 @@ class HotspotService:
             logger.warning(f"Could not fetch Lat/Lon for destination: {destination}")
             return []
 
-        all_hotspots = await self.overpass_fetcher.fetch_hotspots(lat, lon, radius, "tourism")
+        all_hotspots = await self.overpass_fetcher.fetch_hotspots(lat, lon, radius)
 
         # ✅ Basic Ranking Logic (Can be Enhanced Later)
         ranked_hotspots = sorted(all_hotspots, key=lambda x: len(x.name), reverse=True)

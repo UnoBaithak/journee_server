@@ -5,7 +5,7 @@ from typing import Dict, Any, Optional
 class ItineraryGenerationRequestModel(BaseModel):
     destination: str
     num_days: int
-    preferences: Dict[str, Any]
+    preferences: str
 
 class ItineraryUpdationRequestModel(BaseModel):
     user_input: str

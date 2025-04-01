@@ -10,9 +10,9 @@ async def generate_itinerary(
     itineraryGenerationRequest: ItineraryGenerationRequestModel, 
     request: Request
 ):
-    generator = ItineraryGenerator(itineraryGenerationRequest)
-    itinerary = await generator.build_and_save()
-    return {"status": "SUCCESS", "itinerary": itinerary}
+    generator = ItineraryGenerator()
+    response = generator.generate_itinerary(itineraryGenerationRequest)
+    return response
 
 @router.post("/update")
 async def update_full_itinerary(    
