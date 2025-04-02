@@ -12,13 +12,13 @@ class PointOfInterest(BaseModel):
 
 class Activity(BaseModel):
     activity_id: str
-    pointsOfInterest: Optional[List[PointOfInterest]] = Field(description="List of points of interest/hotspots being visited in this activity.")
+    pois: Optional[List[PointOfInterest]] = Field(description="List of points of interest/hotspots being visited in this activity.")
     title: str
     time: datetime
     duration: int
     category: str
     description: str
-    # metadata: Dict[str, str] = Field(description="Placeholder, always return None")
+    # metadata: Dict[str, Any] = Field(description="Placeholder, always return None")
 
 class Accommodation(BaseModel):
     hotel_name: str
@@ -41,4 +41,3 @@ class Itinerary(BaseModel):
     details: List[DayDetails]
     created_at: datetime
     updated_at: datetime
-

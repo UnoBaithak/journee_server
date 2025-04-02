@@ -11,7 +11,7 @@ async def generate_itinerary(
     request: Request
 ):
     generator = ItineraryGenerator()
-    response = generator.generate_itinerary(itineraryGenerationRequest)
+    response = await generator.generate_itinerary(itineraryGenerationRequest)
     return response
 
 @router.post("/update")
