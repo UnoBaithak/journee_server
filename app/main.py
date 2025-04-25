@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import router as app_router
+from app.routes import router as app_router
 from dotenv import load_dotenv
 
 load_dotenv("development.env")
