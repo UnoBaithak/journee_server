@@ -1,4 +1,3 @@
-from hotspots.overpass_api import OverpassDataFetcher
 from hotspots.metadata_fetcher import MetadataFetcher
 
 import logging
@@ -9,7 +8,6 @@ class HotspotService:
     """Service to manage fetching and ranking hotspots"""
 
     def __init__(self):
-        self.overpass_fetcher = OverpassDataFetcher()
         self.metadata_fetcher = MetadataFetcher()
 
     async def get_top_hotspots(self, destination: str, num_results=5, radius=10000):

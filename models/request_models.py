@@ -1,11 +1,19 @@
 from pydantic import BaseModel
-from datetime import datetime
-from typing import Dict, Any, Optional
+from typing import Optional
 
 class ItineraryGenerationRequestModel(BaseModel):
-    destination: str
-    num_days: int
-    preferences: str
+    destination: Optional[str]
+    num_days: Optional[int]
+    preferences: Optional[str]
+    user_input: Optional[str] = None
+    user_id: Optional[str] = None
+
+    def __str__(self):
+        if self.user_input:
+            return self.user_input
+        else:
+            return f"I want to travel to {self.destination} for {self.num_days} day(s)" + \
+                    f". Help me plan an itinerary with the following notes: {self.preferences}"
 
 class ItineraryUpdationRequestModel(BaseModel):
     user_input: str

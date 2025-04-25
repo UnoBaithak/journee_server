@@ -1,12 +1,12 @@
 from fastapi import FastAPI
-from routes.itineraries import router as itinerary_router
+from routes import router as app_router
 from dotenv import load_dotenv
 
 load_dotenv("development.env")
 
 app = FastAPI()
 
-app.include_router(itinerary_router, prefix="/api/itineraries")
+app.include_router(app_router, prefix="/api")
 
 @app.get("/")
 def home():

@@ -1,0 +1,1 @@
+from .hotspots_service import HotspotService
