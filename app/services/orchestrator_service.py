@@ -53,11 +53,11 @@ class Orchestrator:
         conversation_id = itineraryUpdationRequestModel.conversation_id
 
         updated_itinerary = self.llm_service.chat(conversation_id, itineraryUpdationRequestModel.user_input)
+        self.itinerary_service.update_itinerary(itineraryUpdationRequestModel.itinerary_id, updated_itinerary.model_dump())
+
         self.conversation_service.update_conversation(conversation_id, itineraryUpdationRequestModel.user_input, "user")
         self.conversation_service.update_conversation(conversation_id, updated_itinerary.model_dump(), "assistant")
-
-        self.itinerary_service.update_itinerary(itineraryUpdationRequestModel.itinerary_id, updated_itinerary.model_dump())
-        
+ 
         return {"conversation_id": conversation_id, "itinerary_id": itineraryUpdationRequestModel.itinerary_id}
 
 

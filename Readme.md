@@ -8,3 +8,6 @@
 
 ### Itinerary Generation
 ![Generate Itinerary Flow](./docs/Generate%20Itinerary%20Flow.png)
+
+### Itinerary Update (Full update)
+![Update Itinerary Flow](./docs/Update%20Itinerary.png)
