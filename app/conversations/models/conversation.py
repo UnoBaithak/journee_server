@@ -7,7 +7,7 @@ from .message import Message
 class Conversation(BaseModel):
     # conversation id is the unique mongo db id
     messages: List[Message] = []
-    itinerary_id: Optional[str] = Field(description="Itinerary id for which this conversation is based", default=None)
+    linked_itineraries: Optional[List[str]] = Field(description="Itinerary id for which this conversation is based", default=[])
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 

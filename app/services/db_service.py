@@ -3,9 +3,11 @@ from typing import Optional
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
+from common.decorators import Env
 
 logger = logging.getLogger(__name__)
 
+@Env("db_service.env")
 class DBService():
     _instance: Optional["DBService"] = None
     _client: Optional[MongoClient] = None
@@ -15,7 +17,6 @@ class DBService():
         """Singleton Pattern: Ensure only one instance is created"""
         if cls._instance is None:
             cls._instance = super(DBService, cls).__new__(cls)
-            load_dotenv("development-db.env")
             cls._instance._initialize_db()
         return cls._instance
 

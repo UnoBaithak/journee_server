@@ -1,9 +1,9 @@
 from fastapi import APIRouter
-from models.request_models import ItineraryGenerationRequestModel, ItineraryUpdationRequestModel
+from request_models.itinerary_request_models import ItineraryGenerationRequestModel, ItineraryUpdationRequestModel
 from services import Orchestrator
 from services.orchestrator_service import OrchestratorContext
 
-router = APIRouter()
+router = APIRouter(prefix="/api/itinerary")
 orchestrator = Orchestrator()
 
 @router.post("/generate")
@@ -20,3 +20,7 @@ async def update_full_itinerary(
         return await orchestrator.handle(itineraryUpdationRequest, OrchestratorContext.UPDATE_DAY)
 
     return await orchestrator.handle(itineraryUpdationRequest, OrchestratorContext.UPDATE_FULL)
+
+@router.get("/")
+async def generic_welcome():
+    return "On the itinerary route"

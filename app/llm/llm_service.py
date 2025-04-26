@@ -6,8 +6,9 @@ from conversations.models import Message
 from conversations import ConversationService
 from llm.llmclient_factory import LLMClientFactory
 
-load_dotenv("development.env")
+from common.decorators import Env
 
+@Env("llm_service.env")
 class LLMService:
     def __init__(self):
         self.client = LLMClientFactory.get_llm_client(os.getenv("MODEL_NAME"),
@@ -15,6 +16,6 @@ class LLMService:
         self.conversation_service = ConversationService()
 
     def chat(self, conversation_id: str, user_prompt: str):
-        history: List[Message] = self.conversation_service.get_conversation(conversation_id)
+        history: List[Message] = self.conversation_service.get_conversation(conversation_id)["messages"]
         response = self.client.chat(history, user_prompt)
         return response

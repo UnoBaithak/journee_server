@@ -11,9 +11,24 @@ class GeminiClient(BaseClient):
 
     def chat(self, history: List[Message], user_input):
         # TODO: Implement adding history to the generate content method
+        contents = []
+
+        for message in history:
+            content_dict = {
+                "role": message["role"],
+                "parts": [
+                    {
+                        "text": str(message["message"])
+                    }
+                ]
+            }
+            contents.append(content_dict)
+
+        contents.append({"role": "user", "parts": [{"text": user_input}]})
+
         response = self.client.models.generate_content(
             model="gemini-1.5-flash",
-            contents=user_input,
+            contents=contents,
             config = {
                 'response_mime_type': 'application/json',
                 'response_schema': Itinerary,

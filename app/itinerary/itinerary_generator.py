@@ -1,4 +1,4 @@
-from models.request_models import ItineraryGenerationRequestModel
+from app.request_models.itinerary_request_models import ItineraryGenerationRequestModel
 from services.db_service import DBService
 from llm.llm_service import LLMService
 from .models import Itinerary
