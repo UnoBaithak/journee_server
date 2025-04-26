@@ -1,4 +1,5 @@
 from bson import ObjectId
+from pymongo import ReturnDocument
 
 from .util.message_provider import MessageProvider
 from conversations.models import Conversation, Message
@@ -11,16 +12,18 @@ class ConversationService:
         self.conversation_collection = DBService().get_collection("conversations")
 
     def create_conversation(self):
-
         new_conversation = Conversation()
 
         result = self.conversation_collection.insert_one(new_conversation.model_dump())
         conversation_id = str(result.inserted_id)
 
         return conversation_id
-
+    
     def link_conversation_with_itinerary(self, conversation_id, itinerary_id):
-        result = self.conversation_collection.update_one({"_id": ObjectId(conversation_id)}, {"$push": {"itineraries": itinerary_id}})
+        if self.conversation_collection.find_one({"_id": ObjectId(conversation_id)}, {"itinerary_id": 1})["itinerary_id"]:
+            raise RuntimeError("Can't override with other itinerary id")
+        
+        result = self.conversation_collection.update_one({"_id": ObjectId(conversation_id)}, {"$set": {"itinerary": itinerary_id}})
         if result.modified_count == 0:
             raise RuntimeError("Error in linking conversation to itinerary")
 

@@ -10,7 +10,6 @@ class GeminiClient(BaseClient):
         self.client = genai.Client(api_key=api_key)
 
     def chat(self, history: List[Message], user_input):
-        # TODO: Implement adding history to the generate content method
         contents = []
 
         for message in history:

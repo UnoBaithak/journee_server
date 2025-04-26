@@ -9,12 +9,14 @@ class ItineraryService:
         self.collection = DBService().get_collection("itineraries")
 
     def create_new_itinerary(self, itinerary: Itinerary):
-        itinerary.is_temp = True
         result = self.collection.insert_one(itinerary.model_dump())
-        return str(result.inserted_id)
-    
-    def update_itinerary(self, itinerary_id: str, day_id: str, updated_day_details: DayDetails):
-        pass
+        return str(result.inserted_id) 
+
+    def delete_itinerary(self, itinerary_id: str):
+        self.collection.delete_one({"_id": itinerary_id})
+
+    def update_itinerary(self, itinerary_id: str, updated_itinerary: Itinerary):
+        self.collection.update_one({"_id": ObjectId(itinerary_id)}, {"$set": updated_itinerary.model_dump()})
 
     def get_itinerary(self, itinerary_id: str):
         itinerary = self.collection.find_one({"_id": ObjectId(itinerary_id)})

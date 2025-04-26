@@ -56,12 +56,9 @@ class Orchestrator:
         self.conversation_service.update_conversation(conversation_id, itineraryUpdationRequestModel.user_input, "user")
         self.conversation_service.update_conversation(conversation_id, updated_itinerary.model_dump(), "assistant")
 
-        itinerary_id = self.itinerary_service.create_new_itinerary(updated_itinerary)
-        self.conversation_service.link_conversation_with_itinerary(conversation_id, itinerary_id)
-        if itineraryUpdationRequestModel.user_id is not None:
-            self.user_service.add_draft_itinerary(itinerary_id, itineraryUpdationRequestModel.user_id)
-
-        return {"conversation_id": conversation_id, "itinerary_id": itinerary_id}
+        self.itinerary_service.update_itinerary(itineraryUpdationRequestModel.itinerary_id, updated_itinerary.model_dump())
+        
+        return {"conversation_id": conversation_id, "itinerary_id": itineraryUpdationRequestModel.itinerary_id}
 
 
     def _handle_day_update(self, itineraryUpdationRequestModel: ItineraryUpdationRequestModel):

@@ -14,4 +14,3 @@ class Itinerary(BaseModel):
     details: List[DayDetails]
     created_at: datetime
     updated_at: datetime
-    is_temp: bool
