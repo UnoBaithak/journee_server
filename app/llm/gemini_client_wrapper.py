@@ -3,6 +3,9 @@ from google import genai
 from itinerary.models import Itinerary
 from typing import List
 from conversations.models.message import Message
+import logging
+
+logger = logging.getLogger("uvicorn")
 
 class GeminiClient(BaseClient):
     def __init__(self, api_key, stream = False):
@@ -24,7 +27,8 @@ class GeminiClient(BaseClient):
             contents.append(content_dict)
 
         contents.append({"role": "user", "parts": [{"text": user_input}]})
-
+        
+        logger.info(f"LLM Input: {str(contents)}")
         response = self.client.models.generate_content(
             model="gemini-1.5-flash",
             contents=contents,
@@ -34,6 +38,7 @@ class GeminiClient(BaseClient):
                 'system_instruction': self.get_system_instruction()
             },
         )
+        logger.info(f"LLM response: {str(response)}")
 
         return response.parsed
 
