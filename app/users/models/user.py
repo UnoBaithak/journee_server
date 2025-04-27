@@ -31,7 +31,16 @@ class User(BaseModel):
             del data["_id"]
         
         return cls(**data)
+    
+    def dao(self):
+        return {
+            "email": self.email,
+            "name": self.name,
+            "profile_picture": self.profile_picture,
+            "google_id": self.google_id
+        }
 
+    # TODO: might not be needed as default initializations are done by pydantic which are same. 
     @staticmethod
     def create(
         email: str,

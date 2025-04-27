@@ -16,6 +16,7 @@ class AuthService:
     def __init__(self):
         self.user_collection = DBService().get_collection("users")
 
+    # TODO: Maybe this can straight away let a user login.. seamless experience. 
     def register_user(self, user_data: UserAuth):
         existing_user = self.user_collection.count_documents({"email": user_data.email}) > 0
 
@@ -26,6 +27,7 @@ class AuthService:
         result = self.user_collection.insert_one(new_user.model_dump())
         return {"status": "SUCCESS", "id": result.inserted_id}
     
+    # TODO: Need to store token as a http only cookie and add refresh token and all 
     def login(self, user_data: UserAuth):
         user = self.user_collection.find_one({"email": user_data.email})
 

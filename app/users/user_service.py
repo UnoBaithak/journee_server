@@ -1,5 +1,6 @@
 from services.db_service import DBService
 from fastapi import HTTPException
+from .models.user import User
 
 class UserService:
     def __init__(self):
@@ -11,9 +12,7 @@ class UserService:
         if user is None:
             raise HTTPException(404, "User Not found")
         
-        del user["password"]
-        del user["_id"]
-        return user
+        return User.from_mongo(user).dao()
     
     def get_user_itineraries(self, user_id, other_user=False):
         user = self.collection.find_one({"_id": user_id})
@@ -24,7 +23,7 @@ class UserService:
         raise  HTTPException(404, "User Not Found")
     
     def add_draft_itinerary(self, itinerary_id, user_id):
-        self.collection.update_one({"user_id": user_id}, {"$push": {"itineraries.draft": itinerary_id}}, upsert=True)
+        self.collection.update_one({"_id": user_id}, {"$push": {"itineraries.draft": itinerary_id}}, upsert=True)
 
     def add_conversation(self, conversation_id, user_id):
-        self.collection.update_one({"user_id": user_id}, {"$push": {"conversations": conversation_id}})
+        self.collection.update_one({"_id": user_id}, {"$push": {"conversations": conversation_id}})

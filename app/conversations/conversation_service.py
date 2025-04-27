@@ -6,7 +6,6 @@ from conversations.models import Conversation, Message
 from services import DBService
 from typing import Literal
 
-
 class ConversationService:
     def __init__(self):
         self.conversation_collection = DBService().get_collection("conversations")
@@ -33,6 +32,10 @@ class ConversationService:
             return False
 
         return True
+
+    def get_linked_itinerary(self, conversationId: str):
+        result = self.conversation_collection.find_one({"_id": ObjectId(conversationId)}, {"itinerary_id": 1})["itinerary_id"]
+        return result
 
     def get_conversation(self, conversation_id: str):
         return self.conversation_collection.find_one({"_id": ObjectId(conversation_id)})

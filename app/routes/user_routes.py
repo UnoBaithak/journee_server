@@ -10,7 +10,7 @@ async def get_user(user_id: str):
 
 @router.post("/{user_id}/itineraries")
 async def get_user_itineraries(user_id: str):
-    return user_service.get_user_itineraries(user_id)
+    return {"itineraries": user_service.get_user_itineraries(user_id)}
 
 @router.get("/")
 async def generic_welcome():
