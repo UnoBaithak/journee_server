@@ -22,8 +22,23 @@ class UserService:
     
         raise  HTTPException(404, "User Not Found")
     
-    def add_draft_itinerary(self, itinerary_id, user_id):
-        self.collection.update_one({"_id": user_id}, {"$push": {"itineraries.draft": itinerary_id}}, upsert=True)
+    def add_draft_itinerary(self, itinerary_id, conversation_id, user_id):
+        self.collection.update_one(
+            {"_id": user_id}, 
+            {
+                "$push": {
+                    "itineraries.draft": {
+                        "itinerary_id": itinerary_id, 
+                        "conversation_id": conversation_id
+                    }
+                },
+                "$setOnInsert": {
+                   "itineraries": {
+                        "draft": []
+                    }
+                }
+            }, 
+            upsert=True)
 
     def add_conversation(self, conversation_id, user_id):
         self.collection.update_one({"_id": user_id}, {"$push": {"conversations": conversation_id}})

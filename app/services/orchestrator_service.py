@@ -40,6 +40,8 @@ class Orchestrator:
     async def _handle_itinerary_generation(self, itineraryGenerationRequestModel: ItineraryGenerationRequestModel):
         logger.info("Create a new conversation")
         conversation_id = self.conversation_service.create_conversation()
+        # TODO: Can be removed since now all itineraries created by a user are linked to their conversations
+        # THINK: How will group conversations work ? 
         if itineraryGenerationRequestModel.user_id is not None:
             logger.info("Add conversation to user")
             self.user_service.add_conversation(conversation_id, itineraryGenerationRequestModel.user_id)
@@ -58,7 +60,7 @@ class Orchestrator:
         self.conversation_service.link_conversation_with_itinerary(conversation_id, itinerary_id)
         if itineraryGenerationRequestModel.user_id is not None:
             logger.info("Add itinerary to list of draft itineraries")
-            self.user_service.add_draft_itinerary(itinerary_id, itineraryGenerationRequestModel.user_id)
+            self.user_service.add_draft_itinerary(itinerary_id, conversation_id, itineraryGenerationRequestModel.user_id)
         
         return {"conversation_id": conversation_id, "itinerary_id": itinerary_id}
 
