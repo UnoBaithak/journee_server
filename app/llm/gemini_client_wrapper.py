@@ -1,0 +1,54 @@
+from .base_llm_client import BaseClient
+from google import genai
+from itinerary.models import Itinerary
+from typing import List
+from conversations.models.message import Message
+import logging
+
+logger = logging.getLogger("uvicorn")
+
+class GeminiClient(BaseClient):
+    def __init__(self, api_key, stream = False):
+        super().__init__(stream)
+        self.client = genai.Client(api_key=api_key)
+
+    def chat(self, history: List[Message], user_input):
+        contents = []
+
+        for message in history:
+            content_dict = {
+                "role": message["role"],
+                "parts": [
+                    {
+                        "text": str(message["message"])
+                    }
+                ]
+            }
+            contents.append(content_dict)
+
+        contents.append({"role": "user", "parts": [{"text": user_input}]})
+        
+        logger.info(f"LLM Input: {str(contents)}")
+        response = self.client.models.generate_content(
+            model="gemini-1.5-flash",
+            contents=contents,
+            config = {
+                'response_mime_type': 'application/json',
+                'response_schema': Itinerary,
+                'system_instruction': self.get_system_instruction()
+            },
+        )
+        logger.info(f"LLM response: {str(response)}")
+
+        return response.parsed
+
+    def generate_text(self, user_input: str) -> str:
+        response = self.client.models.generate_content(
+            model="gemini-1.5-flash",
+            contents=user_input,
+            config = {
+                'response_mime_type': 'application/json',
+                'response_schema': Itinerary
+            }
+        )
+        return response.parsed
