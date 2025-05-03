@@ -30,13 +30,13 @@ async def get_single_itinerary(itinerary_id: str):
     # What user not being aware means is that they don't explicitly access a conversation, they only access itinerary. 
     return itinerary_service.get_itinerary(itinerary_id)
 
-@router.put("/{itinerary_id}/update")
+@router.put("/{itinerary_id}")
 async def update_full_itinerary(itinerary_id: str, itineraryUpdationRequest: ItineraryUpdationRequestModel):
     logger.info(f"Update full itinerary {itinerary_id}")
     itineraryUpdationRequest.itinerary_id = itinerary_id
     return await orchestrator.handle(itineraryUpdationRequest, OrchestratorContext.UPDATE_FULL)
 
-@router.patch("/{itinerary_id}/day/{day_id}/update")
+@router.patch("/{itinerary_id}/day/{day_id}")
 async def update_day(itinerary_id: str, day_id: str, itineraryUpdateionRequest: ItineraryUpdationRequestModel):
     itineraryUpdateionRequest.itinerary_id = itinerary_id
     itineraryUpdateionRequest.day_id = day_id

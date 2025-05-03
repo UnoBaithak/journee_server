@@ -1,7 +1,21 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from routes import AuthRouter, ItineraryRouter, UserRouter
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",  # replace with your actual frontend domain
+]
+
+# Apply CORS settings
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,          # only this domain is allowed
+    allow_credentials=True,
+    allow_methods=["*"],            # you can limit to ['GET', 'POST'] if needed
+    allow_headers=["*"],
+)
 
 app.include_router(AuthRouter)
 app.include_router(ItineraryRouter)

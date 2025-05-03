@@ -7,9 +7,11 @@ from typing import List, Optional
 from datetime import datetime
 
 class User(BaseModel):
+    """User Database Model"""
     email: str
     name: Optional[str] = None
-    password: str
+    username: Optional[str] = None
+    password: Optional[str] = None
     google_id: Optional[str] = None
     profile_picture: Optional[str] = None
     last_login: Optional[datetime] = None
@@ -36,15 +38,16 @@ class User(BaseModel):
         return {
             "email": self.email,
             "name": self.name,
-            "profile_picture": self.profile_picture,
-            "google_id": self.google_id
+            "profilePicture": self.profile_picture,
+            "username": self.username
         }
 
     # TODO: might not be needed as default initializations are done by pydantic which are same. 
     @staticmethod
     def create(
         email: str,
-        password: str,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
         name: Optional[str] = None,
         google_id: Optional[str] = None,
         profile_picture: Optional[str] = None,
@@ -54,6 +57,7 @@ class User(BaseModel):
     ):
         return User(
             email=email,
+            username=username,
             name=name,
             password=password,
             google_id=google_id,

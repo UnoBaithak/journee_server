@@ -2,9 +2,9 @@ from pydantic import BaseModel
 from typing import Optional
 
 class ItineraryGenerationRequestModel(BaseModel):
-    destination: Optional[str]
-    num_days: Optional[int]
-    preferences: Optional[str]
+    destination: Optional[str] = None
+    num_days: Optional[int] = None
+    preferences: Optional[str] = None
     user_input: Optional[str] = None
     user_id: Optional[str] = None
 
