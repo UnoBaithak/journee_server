@@ -3,19 +3,20 @@ from fastapi import HTTPException
 from .models.user import User
 
 class UserService:
+    """Service to handle all user routes and user specific tasks such as profile management"""
     def __init__(self):
         self.collection = DBService().get_collection("users")
     
-    def get_user_details(self, user_id: str):
-        user = self.collection.find_one({"_id": user_id})
+    def get_user_details(self, username: str):
+        user = self.collection.find_one({"username": username})
 
         if user is None:
             raise HTTPException(404, "User Not found")
         
         return User.from_mongo(user).dao()
     
-    def get_user_itineraries(self, user_id, other_user=False):
-        user = self.collection.find_one({"_id": user_id})
+    def get_user_itineraries(self, username, other_user=False):
+        user = self.collection.find_one({"username": username})
 
         if user is not None:
             return user["itineraries"]
