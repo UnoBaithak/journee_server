@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from auth import AuthService
 from request_models.auth_request_models import UserAuth
+from auth.oauth_handler import OAuthProvider
+from urllib.parse import parse_qs
 
 router = APIRouter(prefix="/api/auth")
 auth_service = AuthService()
@@ -12,6 +14,19 @@ async def register_user(user_data: UserAuth):
 @router.post("/login")
 async def login(user_data: UserAuth):
     return auth_service.login(user_data)
+
+@router.post("/create_username")
+async def update_username_for_user(body: dict):
+    return auth_service.update_username_for_user(body.get("userid"), body.get("password"))
+
+@router.post("/{userid}/create_password")
+async def update_password_for_user(userid: str, body: dict):
+    return auth_service.update_password_for_user(userid, body.get("password"))
+
+@router.post("/google-callback")
+async def handle_google_callback(request: Request):
+    body = await request.body()
+    return auth_service.handle_oauth(body, OAuthProvider.GOOGLE)
 
 @router.get("/")
 async def generic_welcome():
