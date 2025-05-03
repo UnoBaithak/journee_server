@@ -6,6 +6,7 @@ from services.db_service import DBService
 from common.decorators import Env
 from .oauth_handler import OAuthHandler, OAuthProvider
 from .utils import AuthUtils
+from common.config import Config
 import logging
 
 logger = logging.getLogger("uvicorn")
@@ -29,7 +30,7 @@ class AuthService:
         )
         
         new_user_id = self._add_new_user(new_user)
-        response = RedirectResponse(url=f"{domain}/auth/{new_user_id}/create_username", status_code=302)
+        response = RedirectResponse(url=f"{Config.FRONTEND_BASE_URL}/auth/{new_user_id}/create_username", status_code=302)
         
         return response
 
@@ -43,11 +44,11 @@ class AuthService:
             raise HTTPException(status_code=401, detail="Invalid email or password")
 
         if user.get("username", None) is None:
-            response = RedirectResponse(url=f"{domain}/auth/{str(user["_id"])}/create_username", status_code=302)
+            response = RedirectResponse(url=f"{Config.FRONTEND_BASE_URL}/auth/{str(user["_id"])}/create_username", status_code=302)
             return response
 
         token = AuthUtils.create_token(str(user["_id"]))
-        response = RedirectResponse(url=f"{domain}/api/{user.get("username")}/itineraries", status_code=302)
+        response = RedirectResponse(url=f"{Config.FRONTEND_BASE_URL}/api/{user.get("username")}/itineraries", status_code=302)
         response.set_cookie("b_token", token, httponly=True, secure=True)
     
         return response
@@ -72,7 +73,7 @@ class AuthService:
             )
             new_user_id = self._add_new_user(new_user)
             
-            response = RedirectResponse(url=f"{domain}/auth/create_username", status_code=302)
+            response = RedirectResponse(url=f"{Config.FRONTEND_BASE_URL}/auth/create_username", status_code=302)
             return response
         else:
             logger.info("Existing user, update relevant info")
@@ -87,7 +88,7 @@ class AuthService:
             
             self.user_collection.update_one({"_id": user["_id"]}, {"$set": user})
 
-            redirect_url = f"{domain}/user/{str(user["username"])}"
+            redirect_url = f"{Config.FRONTEND_BASE_URL}/user/{str(user["username"])}"
             
             token = AuthUtils.create_token(str(user["_id"]))
             response = RedirectResponse(url=redirect_url, status_code=302)
@@ -99,14 +100,14 @@ class AuthService:
         hashed_password = AuthUtils.hash_password(password=password)
         self.user_collection.update_one({"_id": userid}, {"$set": {"password": hashed_password}})
         
-        response = RedirectResponse(f"{domain}/user/{self.user_collection.find_one({"_id": userid}, {"username": 1})["username"]}/itineraries")
+        response = RedirectResponse(f"{Config.FRONTEND_BASE_URL}/user/{self.user_collection.find_one({"_id": userid}, {"username": 1})["username"]}/itineraries")
         token = AuthUtils.create_token(str(self.user_collection.find_one({"_id": userid}, {"_id": 1})["_id"]))
         response.set_cookie("b_token", token, httponly=True, secure=False)
         return response
 
     def update_username_for_user(self, userid: str, username: str, domain):
         self.user_collection.update_one({"_id": userid}, {"$set": {"username": username}})
-        response = RedirectResponse(url=f"{domain}/user/{username}", status_code=302)
+        response = RedirectResponse(url=f"{Config.FRONTEND_BASE_URL}/user/{username}", status_code=302)
         token = AuthUtils.create_token(userid)
         response.set_cookie("b_token", token, httponly=True, secure=False)
         return response
