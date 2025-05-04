@@ -44,7 +44,7 @@ class AuthService:
             raise HTTPException(status_code=401, detail="Invalid email or password")
 
         if user.get("username", None) is None:
-            response = RedirectResponse(url=f"{Config.FRONTEND_BASE_URL}/auth/{str(user["_id"])}/create_username", status_code=302)
+            response = RedirectResponse(url=f"{Config.FRONTEND_BASE_URL}/auth/{str(user['_id'])}/create_username", status_code=302)
             return response
 
         token = AuthUtils.create_token(str(user["_id"]))
