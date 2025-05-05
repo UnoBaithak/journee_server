@@ -99,8 +99,8 @@ class AuthService:
     def update_password_for_user(self, userid: str, password: str):
         hashed_password = AuthUtils.hash_password(password=password)
         self.user_collection.update_one({"_id": userid}, {"$set": {"password": hashed_password}})
-        
-        response = RedirectResponse(f"{Config.FRONTEND_BASE_URL}/user/{self.user_collection.find_one({"_id": userid}, {"username": 1})["username"]}/itineraries")
+        username = self.user_collection.find_one({"_id": userid}, {"username": 1})["username"]
+        response = RedirectResponse(f"{Config.FRONTEND_BASE_URL}/user/{username}/itineraries")
         token = AuthUtils.create_token(str(self.user_collection.find_one({"_id": userid}, {"_id": 1})["_id"]))
         response.set_cookie("b_token", token, httponly=True, secure=False)
         return response
