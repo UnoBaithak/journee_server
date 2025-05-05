@@ -48,7 +48,7 @@ class AuthService:
             return response
 
         token = AuthUtils.create_token(str(user["_id"]))
-        response = RedirectResponse(url=f"{Config.FRONTEND_BASE_URL}/api/{user.get("username")}/itineraries", status_code=302)
+        response = RedirectResponse(url=f"{Config.FRONTEND_BASE_URL}/api/{user.get('username')}/itineraries", status_code=302)
         response.set_cookie("b_token", token, httponly=True, secure=True)
     
         return response
@@ -88,7 +88,7 @@ class AuthService:
             
             self.user_collection.update_one({"_id": user["_id"]}, {"$set": user})
 
-            redirect_url = f"{Config.FRONTEND_BASE_URL}/user/{str(user["username"])}"
+            redirect_url = f"{Config.FRONTEND_BASE_URL}/user/{str(user['username'])}"
             
             token = AuthUtils.create_token(str(user["_id"]))
             response = RedirectResponse(url=redirect_url, status_code=302)
@@ -96,7 +96,7 @@ class AuthService:
             
             return response
 
-    def update_password_for_user(self, userid: str, password: str, domain: str):
+    def update_password_for_user(self, userid: str, password: str):
         hashed_password = AuthUtils.hash_password(password=password)
         self.user_collection.update_one({"_id": userid}, {"$set": {"password": hashed_password}})
         
@@ -105,7 +105,7 @@ class AuthService:
         response.set_cookie("b_token", token, httponly=True, secure=False)
         return response
 
-    def update_username_for_user(self, userid: str, username: str, domain):
+    def update_username_for_user(self, userid: str, username: str):
         self.user_collection.update_one({"_id": userid}, {"$set": {"username": username}})
         response = RedirectResponse(url=f"{Config.FRONTEND_BASE_URL}/user/{username}", status_code=302)
         token = AuthUtils.create_token(userid)
