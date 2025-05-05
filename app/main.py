@@ -5,7 +5,7 @@ from routes import AuthRouter, ItineraryRouter, UserRouter
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",  # replace with your actual frontend domain
+    "https://*.vercel.app",  # replace with your actual frontend domain
 ]
 
 # Apply CORS settings
