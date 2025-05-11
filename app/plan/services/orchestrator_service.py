@@ -19,7 +19,7 @@ class OrchestratorContext(str, Enum):
 
 
 class Orchestrator:
-    """Orchestrator for the whole of Athena"""
+    """Orchestrator for the planning phase"""
 
     def __init__(self):
         self.conversation_service = ConversationService()
