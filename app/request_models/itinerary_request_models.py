@@ -16,8 +16,6 @@ class ItineraryGenerationRequestModel(BaseModel):
                     f". Help me plan an itinerary with the following notes: {self.preferences}"
 
 class ItineraryUpdationRequestModel(BaseModel):
-    user_id: Optional[str] = None
     user_input: str
-    conversation_id: str
     itinerary_id: Optional[str] = None
     day_id: Optional[str] = None

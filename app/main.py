@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import AuthRouter, ItineraryRouter, UserRouter
+from routes import AuthRouter, ItineraryRouter, UserRouter, PlanRouter
 
 app = FastAPI()
 
@@ -20,6 +20,7 @@ app.add_middleware(
 app.include_router(AuthRouter)
 app.include_router(ItineraryRouter)
 app.include_router(UserRouter)
+app.include_router(PlanRouter)
 
 @app.get("/")
 def home():
