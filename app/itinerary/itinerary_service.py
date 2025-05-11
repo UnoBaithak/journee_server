@@ -14,7 +14,6 @@ class ItineraryService:
     def create_new_itinerary(self, itinerary: Itinerary):
         logger.info(f"Create a new itinerary for {itinerary.title}")
         itinerary.metadata.clonedFrom = None
-        itinerary.metadata.ownerId = None
         result = self.collection.insert_one(itinerary.model_dump())
         return str(result.inserted_id) 
 
@@ -43,6 +42,6 @@ class ItineraryService:
         del itinerary["_id"]
         new_itinerary = Itinerary(**itinerary)
         new_itinerary.metadata.clonedFrom = original_itinerary_id
-        new_itinerary.metadata.ownerId = user_id
+        new_itinerary.metadata.creatorId = user_id
         new_itinerary_id = self.collection.insert_one(new_itinerary.model_dump())
         return new_itinerary_id
