@@ -17,25 +17,13 @@ class ConversationService:
         conversation_id = str(result.inserted_id)
 
         return conversation_id
-    
-    def link_conversation_with_itinerary(self, conversation_id, itinerary_id):
-        if self.conversation_collection.find_one({"_id": ObjectId(conversation_id)}, {"itinerary_id": 1})["itinerary_id"]:
-            raise RuntimeError("Can't override with other itinerary id")
-        
-        result = self.conversation_collection.update_one({"_id": ObjectId(conversation_id)}, {"$set": {"itinerary": itinerary_id}})
-        if result.modified_count == 0:
-            raise RuntimeError("Error in linking conversation to itinerary")
 
-    def update_conversation(self, conversationId: str, message_text: str | dict, role: Literal["user", "assistant"]) -> bool:
+    def add_message_to_converstion(self, conversationId: str, message_text: str | dict, role: Literal["user", "assistant"]) -> bool:
         result = self.conversation_collection.update_one({"_id": ObjectId(conversationId)}, {"$push": {"messages": MessageProvider.convert_input_to_message(message_text=message_text, role=role).model_dump()}})
         if result.modified_count == 0:
             return False
 
         return True
-
-    def get_linked_itinerary(self, conversationId: str):
-        result = self.conversation_collection.find_one({"_id": ObjectId(conversationId)}, {"itinerary_id": 1})["itinerary_id"]
-        return result
 
     def get_conversation(self, conversation_id: str):
         return self.conversation_collection.find_one({"_id": ObjectId(conversation_id)})

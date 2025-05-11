@@ -7,6 +7,9 @@ class ItineraryMetadata(BaseModel):
     destination: str
     num_days: int
     preferences: str
+    creatorId: str | None
+    conversationId: str | None
+    clonedFrom: str | None
 
 # We are not linking itinerary to conversation, because itinerary is stateless relative to conversation
 # Conversation is instead linked to an itinerary because each conversation is unique.  
