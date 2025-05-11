@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
-from request_models.itinerary_request_models import ItineraryGenerationRequestModel, ItineraryUpdationRequestModel
-from services import Orchestrator
-from services.orchestrator_service import OrchestratorContext
+from plan.models.request_models import ItineraryGenerationRequestModel, ItineraryUpdationRequestModel
+from plan.services import Orchestrator
+from plan.services.orchestrator_service import OrchestratorContext
 from auth.utils import AuthUtils
 import logging
 

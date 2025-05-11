@@ -1,12 +1,12 @@
 from pydantic import BaseModel
 
-from conversations import ConversationService
-from itinerary import ItineraryService
+from conversations.services import ConversationService
+from itinerary.services import ItineraryService
 from itinerary.models import Itinerary
-from request_models.itinerary_request_models import ItineraryGenerationRequestModel, ItineraryUpdationRequestModel
+from plan.models.request_models import ItineraryGenerationRequestModel, ItineraryUpdationRequestModel
 from llm import LLMService
 from enum import Enum
-from users.user_internal_service import UserInternalService
+from users.services import UserInternalService
 from hotspots import HotspotService
 import logging
 

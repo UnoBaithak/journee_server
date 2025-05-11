@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from users.user_service import UserService
-from request_models.user_request_models import UserInfoUpdateBody, UserSentiveInfoUpdateBody
+from users.services import UserService
+from users.models.request_models import UserInfoUpdateBody, UserSentiveInfoUpdateBody
 
 router = APIRouter(prefix="/api/user")
 user_service = UserService()

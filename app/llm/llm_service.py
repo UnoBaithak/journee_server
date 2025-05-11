@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from typing import List
 from conversations.models import Message
 
-from conversations import ConversationService
+from conversations.services import ConversationService
 from llm.llmclient_factory import LLMClientFactory
 
 from common.decorators import Env

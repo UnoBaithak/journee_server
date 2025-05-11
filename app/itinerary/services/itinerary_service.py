@@ -14,6 +14,8 @@ class ItineraryService:
     def create_new_itinerary(self, itinerary: Itinerary):
         logger.info(f"Create a new itinerary for {itinerary.title}")
         itinerary.metadata.clonedFrom = None
+        for (idx, dayDetails) in enumerate(itinerary.details):
+            dayDetails.day_id = idx+1
         result = self.collection.insert_one(itinerary.model_dump())
         return str(result.inserted_id) 
 

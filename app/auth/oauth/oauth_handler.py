@@ -1,6 +1,6 @@
 from enum import Enum
 from common.decorators import Env
-from .oauth.google_oauth_handler import GoogleOAuthHandler
+from .google_oauth_handler import GoogleOAuthHandler
 from services import DBService
 import os
 import logging

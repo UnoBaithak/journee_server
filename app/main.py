@@ -1,3 +1,5 @@
+# The main entrypoint of the application
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes import AuthRouter, ItineraryRouter, UserRouter, PlanRouter
@@ -5,7 +7,7 @@ from routes import AuthRouter, ItineraryRouter, UserRouter, PlanRouter
 app = FastAPI()
 
 origins = [
-    "https://*.vercel.app",  # replace with your actual frontend domain
+    "https://*.vercel.app",
 ]
 
 # Apply CORS settings

@@ -1,7 +1,7 @@
 from bson import ObjectId
 from pymongo import ReturnDocument
 
-from .util.message_provider import MessageProvider
+from conversations.util.message_provider import MessageProvider
 from conversations.models import Conversation, Message
 from services import DBService
 from typing import Literal

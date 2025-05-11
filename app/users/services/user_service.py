@@ -1,7 +1,6 @@
 from services.db_service import DBService
 from fastapi import HTTPException
-from bson import ObjectId
-from .models.user import User
+from users.models.user import User
 
 
 class UserService:

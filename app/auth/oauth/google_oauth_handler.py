@@ -1,6 +1,6 @@
 from google.oauth2 import id_token
 from google.auth.transport import requests
-from request_models.auth_request_models import GoogleIDResponse
+from auth.models.request_models import GoogleIDResponse
 from urllib.parse import parse_qs
 import logging
 

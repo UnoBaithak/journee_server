@@ -1,11 +1,11 @@
 from fastapi import HTTPException
 from fastapi.responses import RedirectResponse
-from request_models.auth_request_models import UserAuth
+from auth.models.request_models import UserAuth
 from users.models.user import User
 from services.db_service import DBService
 from common.decorators import Env
-from .oauth_handler import OAuthHandler, OAuthProvider
-from .utils import AuthUtils
+from auth.oauth.oauth_handler import OAuthHandler, OAuthProvider
+from auth.utils import AuthUtils
 from common.config import Config
 import logging
 

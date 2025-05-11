@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
-from auth import AuthService
-from request_models.auth_request_models import UserAuth
-from auth.oauth_handler import OAuthProvider
+from auth.services import AuthService
+from auth.models.request_models import UserAuth
+from auth.oauth.oauth_handler import OAuthProvider
 from urllib.parse import parse_qs
 
 router = APIRouter(prefix="/api/auth")
