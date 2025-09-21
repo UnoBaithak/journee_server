@@ -5,7 +5,7 @@ import bcrypt
 from fastapi import Request
 import jwt
 from common.decorators import Env
-from jwt import ExpiredSignatureError, InvalidTokenError
+
 
 @Env("auth_service.env")
 class AuthUtils:
@@ -39,7 +39,5 @@ class AuthUtils:
                 algorithms=[os.getenv("JWT_ALGORITHM")]
             )
             return payload
-        except ExpiredSignatureError:
+        except:
             raise Exception("Token has expired")
-        except InvalidTokenError:
-            raise Exception("Invalid token")

@@ -10,13 +10,17 @@ class GeolocationFetcher:
         logger.info(f"Fetching Lat/Lon for '{destination}' using Nominatim")
 
         params = {"q": destination, "format": "json", "limit": 1}
-        async with httpx.AsyncClient() as client:
-            response = await client.get(self.NOMINATIM_URL, params=params)
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(self.NOMINATIM_URL, params=params)
+        
 
-        if response.status_code != 200 or not response.json():
-            logger.error(f"Failed to fetch Lat/Lon for '{destination}'")
+            if response.status_code != 200 or not response.json():
+                logger.error(f"Failed to fetch Lat/Lon for '{destination}'")
+                return None, None
+
+            data = response.json()[0]
+            lat, lon = float(data["lat"]), float(data["lon"])
+            return lat, lon
+        except:
             return None, None
-
-        data = response.json()[0]
-        lat, lon = float(data["lat"]), float(data["lon"])
-        return lat, lon
