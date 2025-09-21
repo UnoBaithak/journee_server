@@ -1,0 +1,39 @@
+from fastapi import APIRouter, Depends, Request
+from auth.services import AuthService
+from auth.models.request_models import UserAuth
+from auth.oauth.oauth_handler import OAuthProvider
+from .utils import AuthUtils
+
+router = APIRouter(prefix="/api/auth")
+auth_service = AuthService()
+
+@router.post("/register")
+async def register_user(user_data: UserAuth, request: Request):
+    return auth_service.register_user(user_data, request.base_url)
+
+@router.post("/login")
+async def login(user_data: UserAuth, request: Request):
+    return auth_service.login(user_data, request.base_url)
+
+@router.post("/create_username")
+async def update_username_for_user(body: dict, request: Request):
+    return auth_service.update_username_for_user(body.get("userid"), body.get("password"), request.base_url)
+
+@router.post("/{userid}/create_password")
+async def update_password_for_user(userid: str, body: dict, request: Request):
+    return auth_service.update_password_for_user(userid, body.get("password"), request.base_url)
+
+@router.post("/google-callback")
+async def handle_google_callback(request: Request):
+    body = await request.body()
+    return auth_service.handle_oauth(body, OAuthProvider.GOOGLE, request.base_url)
+
+@router.get("/session")
+async def handle_session(jwt_payload = Depends(AuthUtils.decode_jwt_token)):
+    return {"isLoggedIn": True, "username": "atharva.sune"}
+
+
+
+@router.get("/")
+async def generic_welcome():
+    return "On the auth route"

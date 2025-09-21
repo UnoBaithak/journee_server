@@ -1,0 +1,14 @@
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Virtual Environment folders
+venv/
+.venv/
+
+# Environment variables file (contains secrets!)
+.env
+
+# Build artifacts
+dist/
+build/
