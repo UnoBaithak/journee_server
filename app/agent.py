@@ -1,32 +1,30 @@
 import datetime
-from zoneinfo import ZoneInfo
-from google.adk.agents import LlmAgent
-from google.adk.tools import AgentTool
-from app.tools import get_flights, get_hotels, get_tourist_attractions
+from google.adk.agents import SequentialAgent, LlmAgent
+from app.sub_agents.itinerary import itinerary_agent
+from app.itinerary.models.dao import Itinerary
+instruction = '''  You are a step agent. Your task is to delegate read the response from the itinerary_sub_agent.
+
+When you receive a response from the itinerary_sub_agent, you MUST first attempt to parse it and format it according to the Itinerary schema.
+If the response is successfully parsed into a valid Itinerary object, place the structured JSON object into the itinerary field of the final OutputSchema.
+If the response cannot be parsed (e.g., it's a simple string like 'I cannot find an itinerary for that location', an error, or incomplete data), you MUST place the raw, unformatted response string into the response field of the final OutputSchema.
+Your final output to the user must always be a JSON object that conforms to the OutputSchema.  '''
 
 
-root_agent = LlmAgent(
+formatter_agent = LlmAgent(
     name="orchestrator",
     model="gemini-2.0-flash",
-    description=(
-        "You are a helpful agent who helps with travel planning. " + 
-        "When a user asks for an itinerary, you must use the 'itinerary_agent' tool. " + 
-        "The output from 'itinerary_agent' is the final answer and should be presented directly to the user without any summarization, rephrasing, or additional comments." + 
-        "If a user asks for flight details you must use the 'flight_agent' tool" + 
-        "The output of 'flight_agent'  is the final answer and should be presented directly to the user without any summarization, rephrasing, or additional comments." 
+    description=instruction,
+    instruction=instruction,
+    output_schema=Itinerary,
+)
+
+root_agent = SequentialAgent(
+        name="root_agent",
+ description=(
+        """
+        This is the root agent that coordinates the generation of itinerary and formatting the itinerary in a certain way.
+        """
     ),
-    instruction=(
-    "You are a highly capable travel planning agent. " +
-    "When a user requests an points of interest for a given place, you must use the 'get_tourist_attractions' tool. " +
-    "If a user asks for flight details, you must use the 'get_flights' tool. " +
-    "If a user asks for hotel details, you must use the 'get_hotels' tool. " +
-    "When a user requests an itinerary or comprehensive trip planning, you must use all relevant tools " +
-    "(get_tourist_attractions, get_flights, get_hotels) as needed to provide a detailed itinerary that includes: " +
-    "complete day-by-day schedule containing good points of interest (from 'get_tourist_attractions'), relevant flight options (from 'get_flights'), " +
-    "suitable hotels or accommodation options (from 'get_hotels'), and suggestions for places to visit, activities, " +
-    "and experiences at each destination. " +
-    "Your mission is to deliver accurate, actionable, and detailed travel plans using specialized tools, " +
-    "ensuring the user receives all necessary details for a seamless trip. All this in an easily understandable human readble format."
-    ),
-    tools=[get_tourist_attractions, get_flights, get_hotels],
+    sub_agents=[itinerary_agent, formatter_agent],
+
 )

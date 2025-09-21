@@ -12,3 +12,4 @@ venv/
 # Build artifacts
 dist/
 build/
+.DS_Store
